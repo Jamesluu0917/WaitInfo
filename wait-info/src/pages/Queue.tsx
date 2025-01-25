@@ -1,13 +1,14 @@
-import './../App.css'
+import "./../App.css";
 
-function Queue() {
+import React from "react";
+import WaitTime from "../components/wait-time";
+
+const Queue = () => {
   return (
-    <>
-      <div>
-        <h1>Queue</h1>
-      </div>
-    </>
-  )
-}
+    <div className="p-4">
+      <WaitTime time="45 minutes" />
+    </div>
+  );
+};
 
-export default Queue
+export default Queue;
