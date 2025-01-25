@@ -1,7 +1,7 @@
 import "./../App.css";
 
 import React from "react";
-import WaitTime from "../components/wait-time";
+import WaitTime from "../components/WaitTime";
 
 const Queue = () => {
   return (
