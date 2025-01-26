@@ -1,5 +1,3 @@
-import React, { useState, useActionState } from "react";
-import { Divider } from "@mui/material";
 import "../index.css";
 //import { addNewPatient } from "./api";
 

@@ -13,18 +13,14 @@
   },
   "functions": [
     {
-      "source": "functions",
-      "codebase": "default",
+      "source": "fun",
+      "codebase": "fun",
       "ignore": [
         "node_modules",
         ".git",
         "firebase-debug.log",
         "firebase-debug.*.log",
         "*.local"
-      ],
-      "predeploy": [
-        "npm --prefix \"$RESOURCE_DIR\" run lint",
-        "npm --prefix \"$RESOURCE_DIR\" run build"
       ]
     }
   ]
