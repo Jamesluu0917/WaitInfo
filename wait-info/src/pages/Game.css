@@ -1,5 +1,32 @@
 .game-button {
-  height: "150px";
-  width: "150px";
-  border-radius: "15px";
+  width: 100%;
+  aspect-ratio: 1;
+  border-radius: 15px;
+  border: none;
+  outline: none;
+  cursor: pointer;
+  transition: transform 0.2s;
+}
+
+.game-button:active {
+  transform: scale(0.8);
+}
+
+.highlight {
+  transform: scale(0.8);
+}
+
+.start-button {
+  background-color: #6bbaec;
+  color: white;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-size: 18px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.start-button:hover {
+  background-color: #2b98db;
 }
