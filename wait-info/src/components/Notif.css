@@ -1,0 +1,25 @@
+.notif-container {
+  display: flex;
+  align-items: left;
+  flex-direction: column;
+  padding: 20px;
+  background-color: #ffffff;
+  border-radius: 8px;
+  width: 90%;
+}
+
+.time-text {
+  font-size: 16;
+  font-weight: 600;
+  color: #2c518c;
+  text-align: left;
+  margin-bottom: 10px;
+}
+
+.message-text {
+  font-size: 12;
+  font-weight: 500;
+  color: #05204a;
+  text-align: left;
+  line-height: 1.2;
+}
