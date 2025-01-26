@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import { useState, useEffect } from "react";
 import Header from "../components/Header";
 import "./../App.css";
 import "./Game.css";
@@ -31,7 +31,7 @@ const Game = () => {
 
   // Play the sequence by lighting up buttons
   const playSequence = async (sequence: number[]) => {
-    for (let index of sequence) {
+    for (const index of sequence) {
       await new Promise((resolve) => setTimeout(resolve, 600));
       highlightButton(index);
       await new Promise((resolve) => setTimeout(resolve, 600));
