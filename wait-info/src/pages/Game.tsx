@@ -1,10 +1,13 @@
+import Header from "../components/Header";
 import "./../App.css";
 
 import "./Game.css";
 
 const Game = () => {
   return (
-    <div style={{ alignItems: "center", minHeight: "300px" }}>
+    <div>
+      <Header />
+      <div style={{ alignItems: "center", minHeight: "300px" }}>
       <h3 style={{ fontSize: "24px", marginTop: "25px", marginBottom: "20px" }}>
         Let's play a game!
       </h3>
@@ -49,6 +52,8 @@ const Game = () => {
         ></button>
       </div>
     </div>
+    </div>
+    
   );
 };
 

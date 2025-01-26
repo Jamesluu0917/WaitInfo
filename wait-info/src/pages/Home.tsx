@@ -1,6 +1,59 @@
-import './../App.css'
+import React, { useState } from 'react';
+import './../App.css';
+import axios from 'axios';
+import Cookies from 'js-cookie';
+import { useNavigate } from 'react-router-dom';
+
+interface PatientData {
+  id: string;
+  name: string;
+  age: number;
+  // Add any other fields that the API returns
+}
 
 function Home() {
+  const [patientId, setPatientId] = useState<string>('');
+  const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [patientData, setPatientData] = useState<PatientData | null>(null);
+
+  const navigate = useNavigate(); // For navigation to another page
+
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>): void => {
+    setPatientId(e.target.value);
+  };
+
+  const handleStartClick = async (): Promise<void> => {
+    if (!patientId) {
+      setError('Patient ID is required');
+      return;
+    }
+
+    setLoading(true);
+    setError(null);
+    setPatientData(null);
+
+    try {
+      const response = await axios.get(`https://ifem-award-mchacks-2025.onrender.com/api/v1/patient/${patientId}`);
+      const data = response.data;
+      setPatientData(data);
+
+      // Save patient data to cookies (you can use JSON.stringify if the data is complex)
+      Cookies.set('patientData', JSON.stringify(data), { expires: 7 }); // expires in 7 days
+
+      // Save patient data to cookies (you can use JSON.stringify if the data is complex)
+      Cookies.set('patientId', JSON.stringify(patientId), { expires: 7 }); // expires in 7 days
+
+      // Navigate to another page (replace '/dashboard' with your desired route)
+      navigate('/queue');
+    } catch (error) {
+      setError('Failed to fetch patient data');
+      console.error('Error calling external API:', error);
+    } finally {
+      setLoading(false);
+    }
+  };
+
   return (
     <>
       <div>
@@ -11,12 +64,23 @@ function Home() {
         <h2>Welcome to the waiting room!</h2>
         <p>Enter your Patient ID to start tracking</p>
         <div>
-          <input type="text" placeholder="#PatientID" />
-          <button style={{ marginLeft: '10px', marginRight: '10px' }}>Start</button>
+          <input
+            type="text"
+            placeholder="#PatientID"
+            value={patientId}
+            onChange={handleInputChange}
+          />
+          <button
+            style={{ marginLeft: '10px', marginRight: '10px' }}
+            onClick={handleStartClick}
+            disabled={loading}
+          >
+            {loading ? 'Loading...' : 'Start'}
+          </button>
         </div>
       </div>
     </>
-  )
+  );
 }
 
-export default Home
+export default Home;

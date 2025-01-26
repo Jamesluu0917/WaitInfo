@@ -1,34 +1,210 @@
 import "./../App.css";
 
+import React, { useEffect, useState } from 'react';
+import Cookies from 'js-cookie';
 import WaitTime from "../components/WaitTime";
+import Phases from "../components/Phases";
 import PeopleAhead from "../components/PeopleAhead";
 import Notif from "../components/Notif";
-import { Divider } from "@mui/material";
+import { Divider, Stack } from "@mui/material";
+import axios from "axios";
+import Header from "../components/Header";
 
-const Queue = () => {
-  return (
-    <div>
-      <h2 style={{ marginTop: "25px", marginBottom: "20px" }}>
-        Waiting Status
-      </h2>
-      <div style={{ marginBottom: "15px" }}>
-        <WaitTime time={"45 minutes"} />
-      </div>
-      <div style={{ marginBottom: "25px" }}>
-        <PeopleAhead peopleAhead={"8"} />
-      </div>
-      <Divider flexItem />
-      <h2 style={{ marginTop: "25px", marginBottom: "20px" }}>Notifications</h2>
-      <div style={{ marginBottom: "15px" }}>
-        <Notif
-          time={"8:00 AM"}
-          message={
-            "You have been registered to the waiting list! Please wait for your turn to get treated."
+type PatientData = {
+    arrival_time: string; // Date-time string
+    id: string; // Patient ID as a string
+    queue_position: {
+      category: number; // Category number for the queue position
+      global: number; // Global queue position number
+    };
+    status: {
+      current_phase: string; // The current phase (e.g., 'treatment')
+      investigations: {
+        imaging: string; // Imaging status (e.g., 'reported')
+        labs: string; // Labs status (e.g., 'reported')
+      };
+    };
+    time_elapsed: number; // Time elapsed in minutes
+    triage_category: number; // The triage category (e.g., 3)
+  };
+
+  type Stats = {
+    averageWaitTimes: {
+      [key: string]: number; // Dynamic keys for each category (e.g., "1", "2", etc.)
+    };
+    categoryBreakdown: {
+      [key: string]: number; // Dynamic keys for each category (e.g., "1", "2", etc.)
+    };
+  };
+
+  type Progress = {
+    registered: boolean;
+    triaged: boolean;
+    investigations_pending: boolean;
+    treatment: boolean;
+    admitted: boolean;
+    discharged: boolean;
+  };
+
+  const Queue = () => {
+    const [patientData, setPatientData] = useState(null); // or an empty object {}
+    const [stats, setStats] = useState<Stats | null>(null);
+    const [progress, setProgress] = useState<Progress>({
+      registered: false,
+      triaged: false,
+      investigations_pending: false,
+      treatment: false,
+      admitted: false,
+      discharged: false,
+    });
+    const [formattedTime, setFormattedTime] = useState<string>("");
+  
+    useEffect(() => {
+        const fetchPatientData = async () => {
+          const patientId = Cookies.get('patientId'); // Ensure patientId is set
+          if (patientId) {
+            try {
+              const response = await axios.get(`https://ifem-award-mchacks-2025.onrender.com/api/v1/patient/${patientId}`);
+              const data = response.data;
+      
+              console.log('Fetched patient data:', data); // Debug
+              setPatientData(data);
+              Cookies.set('patientData', JSON.stringify(data), { expires: 7 });
+            } catch (error) {
+              console.error('Error fetching patient data:', error);
+            }
+          } else {
+            console.error('No patientId found in cookies.');
           }
-        />
-      </div>
-    </div>
-  );
+        };
+      
+        const fetchStats = async () => {
+          try {
+            const response = await axios.get('https://ifem-award-mchacks-2025.onrender.com/api/v1/stats/current');
+            const statsData = response.data;
+            console.log('Fetched stats:', statsData); // Debug
+            setStats(statsData);
+          } catch (error) {
+            console.error('Error fetching stats:', error);
+          }
+        };
+      
+        fetchPatientData();
+        fetchStats();
+        console.log('patientData:', patientData);
+        console.log('investigation:', patientData?.status?.investigations.imaging);
+        console.log('investigation:', patientData?.status?.investigations?.imaging);
+        console.log('stats:', stats);
+      }, []);
+
+  // Updating progress when patientData changes
+  useEffect(() => {
+    if (patientData) {
+      setProgress({
+        registered: true,
+        triaged: patientData.triage_category > 0,
+        investigations_pending:
+          patientData.status.current_phase === "investigations_pending" ||
+          (patientData?.status?.investigations &&
+            (patientData.status.investigations.imaging === "reported" ||
+             patientData.status.investigations.labs === "reported")),
+        treatment: patientData.status.current_phase === "treatment",
+        admitted: patientData.status.current_phase === "admitted",
+        discharged: patientData.status.current_phase === "discharged",
+      });
+  
+      // Format arrival time as soon as patientData is set
+      const formatted = new Date(patientData.arrival_time).toLocaleString('en-US', {
+        weekday: 'long',
+        year: 'numeric',
+        month: 'long',
+        day: 'numeric',
+        hour: '2-digit',
+        minute: '2-digit',
+      });
+      setFormattedTime(formatted);
+    }
+  }, [patientData]); // Removed formattedTime from dependency array
+
+    return (
+        <div>
+            <Header />
+            <h2 style={{ marginTop: "25px", marginBottom: "20px" }}>
+                Waiting Status
+            </h2>
+            {patientData && stats ? (
+                <>
+                    <div style={{ marginBottom: "15px" }}>
+                        <WaitTime time={`${Math.floor(stats.averageWaitTimes[patientData.triage_category]/60)}h${stats.averageWaitTimes[patientData.triage_category]%60 }min`} />
+                    </div>
+                    <div style={{ marginBottom: "25px" }}>
+                        <PeopleAhead peopleAhead={`${patientData.queue_position.global - 1}`} />
+                    </div>
+                    <Divider flexItem />
+                    <h2 style={{ marginTop: "25px", marginBottom: "20px" }}>Progress</h2>
+                    <div style={{ marginBottom: "15px" }}>
+                        <Phases
+                            progress={progress}
+                        />
+                    </div>
+                    <Divider flexItem />
+                    <h2 style={{ marginTop: "25px", marginBottom: "20px" }}>Notifications</h2>
+                    <div style={{ marginBottom: "15px" }}>
+                    <Stack spacing={2}>
+                    {progress.discharged && (
+                        <Notif
+                        time={""}
+                        message={
+                            `You have been discharged. Thank you for your patience.`
+                        }
+                        />
+                    )}
+                    {progress.admitted && (
+                        <Notif
+                        time={""}
+                        message={
+                            `You have been admitted to hospital. Thank you for your patience.`
+                        }
+                        />
+                    )}
+                    {progress.investigations_pending ? (
+                        patientData?.status?.investigations?.imaging &&
+                        patientData?.status?.investigations?.labs ? (
+                            <Notif
+                            time={""}
+                            message={`The investigation is progressing: Imaging=${patientData.status.investigations.imaging}. Test Labs=${patientData.status.investigations.labs}`}
+                            />
+                        ) : (
+                            <Notif
+                            time={""}
+                            message={`The investigation is progressing.`}
+                            />
+                        )
+                    ) : null}
+                    {progress.triaged && (
+                        <Notif
+                        time={""}
+                        message={
+                            `You have been given the triage category ${patientData.triage_category}`
+                        }
+                        />
+                    )}
+                    {progress.registered && (
+                        <Notif
+                        time={formattedTime}
+                        message={
+                            "You have been registered to the waiting list! Please wait for your turn to get treated."
+                        }
+                        />
+                    )}
+                    </Stack>
+                    </div>
+                </>
+            ) : (
+                <p>Loading patient data...</p>
+            )}
+        </div>
+    );
 };
 
 export default Queue;
