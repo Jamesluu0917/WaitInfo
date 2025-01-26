@@ -3,17 +3,17 @@ import { Divider } from "@mui/material";
 import "./WaitTime.css";
 
 interface PeopleAheadProps {
-  peopleAhead: string; // Time string, e.g., "45 minutes"
+  peopleAhead: string; // Number of people ahead, e.g., "8"
 }
 
 const PeopleAhead: React.FC<PeopleAheadProps> = ({ peopleAhead }) => {
   return (
     <div className="wait-time-container">
       <svg
-        width="50px"
+        width="25px"
         height="30px"
-        viewBox="0 0 24 24"
         xmlns="http://www.w3.org/2000/svg"
+        style={{ marginRight: "10px" }}
       >
         <path
           fill="#05204A"
