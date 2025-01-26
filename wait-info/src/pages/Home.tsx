@@ -4,18 +4,11 @@ import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
 
-interface PatientData {
-  id: string;
-  name: string;
-  age: number;
-  // Add any other fields that the API returns
-}
 
 function Home() {
   const [patientId, setPatientId] = useState<string>('');
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState<boolean>(false);
-  const [patientData, setPatientData] = useState<PatientData | null>(null);
 
   const navigate = useNavigate(); // For navigation to another page
 
@@ -26,23 +19,23 @@ function Home() {
   const handleStartClick = async (): Promise<void> => {
     if (!patientId) {
       setError('Patient ID is required');
+      console.log(error);
       return;
     }
 
     setLoading(true);
     setError(null);
-    setPatientData(null);
 
     try {
-      const response = await axios.get(`https://ifem-award-mchacks-2025.onrender.com/api/v1/patient/${patientId}`);
+      const apiUrl = 'https://ifem-award-mchacks-2025.onrender.com/api/v1/patient';
+      const response = await axios.get(`${apiUrl}/${patientId}`);
       const data = response.data;
-      setPatientData(data);
 
       // Save patient data to cookies (you can use JSON.stringify if the data is complex)
       Cookies.set('patientData', JSON.stringify(data), { expires: 7 }); // expires in 7 days
 
-      // Save patient data to cookies (you can use JSON.stringify if the data is complex)
-      Cookies.set('patientId', JSON.stringify(patientId), { expires: 7 }); // expires in 7 days
+      // Save patient ID to cookies without using JSON.stringify
+      Cookies.set('patientId', patientId, { expires: 7 }); // expires in 7 days
 
       // Navigate to another page (replace '/dashboard' with your desired route)
       navigate('/queue');

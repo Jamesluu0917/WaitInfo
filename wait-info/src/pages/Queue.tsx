@@ -1,6 +1,6 @@
 import "./../App.css";
 
-import React, { useEffect, useState } from 'react';
+import { useEffect, useState } from 'react';
 import Cookies from 'js-cookie';
 import WaitTime from "../components/WaitTime";
 import Phases from "../components/Phases";
@@ -47,7 +47,7 @@ type PatientData = {
   };
 
   const Queue = () => {
-    const [patientData, setPatientData] = useState(null); // or an empty object {}
+    const [patientData, setPatientData] = useState<PatientData | null>(null);
     const [stats, setStats] = useState<Stats | null>(null);
     const [progress, setProgress] = useState<Progress>({
       registered: false,
@@ -64,12 +64,13 @@ type PatientData = {
           const patientId = Cookies.get('patientId'); // Ensure patientId is set
           if (patientId) {
             try {
-              const response = await axios.get(`https://ifem-award-mchacks-2025.onrender.com/api/v1/patient/${patientId}`);
+                const apiUrl = 'https://ifem-award-mchacks-2025.onrender.com/api/v1/patient';
+                const response = await axios.get(`${apiUrl}/${patientId}`);
               const data = response.data;
       
               console.log('Fetched patient data:', data); // Debug
               setPatientData(data);
-              Cookies.set('patientData', JSON.stringify(data), { expires: 7 });
+              Cookies.set('patientId', patientId, { expires: 7 }); // expires in 7 days
             } catch (error) {
               console.error('Error fetching patient data:', error);
             }
@@ -80,7 +81,8 @@ type PatientData = {
       
         const fetchStats = async () => {
           try {
-            const response = await axios.get('https://ifem-award-mchacks-2025.onrender.com/api/v1/stats/current');
+            const apiUrl = 'https://ifem-award-mchacks-2025.onrender.com';
+            const response = await axios.get(`${apiUrl}/api/v1/stats/current`);
             const statsData = response.data;
             console.log('Fetched stats:', statsData); // Debug
             setStats(statsData);
@@ -167,20 +169,12 @@ type PatientData = {
                         }
                         />
                     )}
-                    {progress.investigations_pending ? (
-                        patientData?.status?.investigations?.imaging &&
-                        patientData?.status?.investigations?.labs ? (
+                    {progress.triaged && patientData.status && patientData.status.investigations && (
                             <Notif
                             time={""}
                             message={`The investigation is progressing: Imaging=${patientData.status.investigations.imaging}. Test Labs=${patientData.status.investigations.labs}`}
                             />
-                        ) : (
-                            <Notif
-                            time={""}
-                            message={`The investigation is progressing.`}
-                            />
-                        )
-                    ) : null}
+                        )}
                     {progress.triaged && (
                         <Notif
                         time={""}

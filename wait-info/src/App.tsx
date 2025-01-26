@@ -3,7 +3,6 @@ import Home from "./pages/Home"; // Assuming your App.tsx is now Home
 import Queue from "./pages/Queue";
 import Admin from "./pages/Admin";
 import Game from "./pages/Game";
-import Header from "./components/Header";
 
 import "./App.css";
 
