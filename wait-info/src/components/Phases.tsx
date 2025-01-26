@@ -62,7 +62,19 @@ const Phases: React.FC<WaitTimeProps> = ({ progress }) => {
                 )}
               <TimelineConnector />
             </TimelineSeparator>
-            <TimelineContent>Tests/Imaging Ordered</TimelineContent>
+            <TimelineContent>Investigation: Tests / Imaging Ordered</TimelineContent>
+          </TimelineItem>
+
+          <TimelineItem>
+            <TimelineSeparator>
+                {progress.treatment ? (
+                    <TimelineDot color="primary" />
+                ) : (
+                    <TimelineDot />
+                )}
+              <TimelineConnector />
+            </TimelineSeparator>
+            <TimelineContent>Treatement Completed</TimelineContent>
           </TimelineItem>
 
           <TimelineItem>
@@ -73,7 +85,7 @@ const Phases: React.FC<WaitTimeProps> = ({ progress }) => {
                     <TimelineDot />
                 )}
             </TimelineSeparator>
-            <TimelineContent>Completion</TimelineContent>
+            <TimelineContent>Admitted / Discharged</TimelineContent>
           </TimelineItem>
         </Timeline>
       );

@@ -60,7 +60,7 @@ function SessionMenu() {
             aria-controls={open ? 'account-menu' : undefined}
             aria-haspopup="true"
             aria-expanded={open ? 'true' : undefined}
-          ><MenuRoundedIcon />
+          ><MenuRoundedIcon  sx={{color: 'text.primary'}} />
           </IconButton>
         </Tooltip>
       </Box>
