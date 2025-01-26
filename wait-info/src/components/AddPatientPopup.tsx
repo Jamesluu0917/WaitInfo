@@ -1,96 +1,84 @@
 import React, { useState, useActionState } from "react";
 import { Divider } from "@mui/material";
 import "../index.css";
-import "./AddPatientPopup.css";
 //import { addNewPatient } from "./api";
 
 const AddPatientPopup = () => {
-  /*
-  async function signup(formData) {
-    "use server";
-    const patientName = formData.get("name");
-    const phoneNumber = formData.get("phoneNumber");
-    const priorityLevel = formData.get("priorityLevel");
-    try {
-      await addNewPatient(patientName, phoneNumber, priorityLevel);
-      alert(`Added new patient with ID ${PATIENTID}`);
-    } catch (err) {
-      return err.toString();
-    }
-  }*/
-  //const [message, signupAction] = useActionState(signup, null);
-  //action={signupAction}
-  //{!!message && <p>{message}</p>}
   return (
-    <div className="popup-container">
-      <h1>Add a patient</h1>
-      <form
-        id="signup-form"
+    <div>
+  <h2>Add a patient</h2>
+  <form id="signup-form" style={{ display: "flex", flexDirection: "column", gap: "15px" }}>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <label htmlFor="name" style={{ flexBasis: "50%", textAlign: "left" }}>
+        Name:
+      </label>
+      <input
         style={{
-          display: "flex",
-          flexDirection: "column",
-          gap: "10px",
-          alignItems: "stretch", // Ensure inputs stretch correctly
+          flexBasis: "50%",
+          width: "200px",
+          textAlign: "center",
         }}
-      >
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center", // Align label and input vertically
-          }}
-        >
-          <label htmlFor="name" style={{ flexShrink: 0 }}>
-            Name:
-          </label>
-          <input
-            style={{ marginLeft: "auto", maxWidth: "200px" }}
-            name="name"
-            id="name"
-            placeholder="name"
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="phoneNumber" style={{ flexShrink: 0 }}>
-            Phone Number:
-          </label>
-          <input
-            style={{ marginLeft: "auto", maxWidth: "200px" }}
-            name="phoneNumber"
-            id="phoneNumber"
-            placeholder="phone number"
-          />
-        </div>
-        <div
-          style={{
-            display: "flex",
-            justifyContent: "space-between",
-            alignItems: "center",
-          }}
-        >
-          <label htmlFor="priorityLevel" style={{ flexShrink: 0 }}>
-            Priority Level:
-          </label>
-          <input
-            style={{ marginLeft: "auto", maxWidth: "200px" }}
-            name="priorityLevel"
-            id="priorityLevel"
-            placeholder="priority level"
-          />
-        </div>
-
-        <div style={{ display: "flex", gap: "10px", marginTop: "10px" }}>
-          <button type="submit">Save</button>
-          <button type="button">Cancel</button>
-        </div>
-      </form>
+        name="name"
+        id="name"
+        placeholder="name"
+      />
     </div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <label htmlFor="phoneNumber" style={{ flexBasis: "50%", textAlign: "left" }}>
+        Phone Number:
+      </label>
+      <input
+        style={{
+          flexBasis: "50%",
+          width: "200px",
+          textAlign: "center",
+        }}
+        name="phoneNumber"
+        id="phoneNumber"
+        placeholder="phone number"
+      />
+    </div>
+    <div
+      style={{
+        display: "flex",
+        justifyContent: "space-between",
+        alignItems: "center",
+      }}
+    >
+      <label htmlFor="priorityLevel" style={{ flexBasis: "50%", textAlign: "left" }}>
+        Priority Level:
+      </label>
+      <input
+        style={{
+          flexBasis: "50%",
+          width: "200px",
+          textAlign: "center",
+        }}
+        name="priorityLevel"
+        id="priorityLevel"
+        placeholder="priority level"
+      />
+    </div>
+
+    <div style={{ display: "flex", gap: "10px", marginTop: "10px", justifyContent: "flex-end" }}>
+      <button className="cancel" type="button">Cancel</button>
+      <button type="submit" style={{ backgroundColor: '#6BBAEC' }}>Save</button>
+    </div>
+  </form>
+</div>
+
   );
 };
 

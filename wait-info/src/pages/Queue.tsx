@@ -1,6 +1,5 @@
 import "./../App.css";
 
-import React from "react";
 import WaitTime from "../components/WaitTime";
 import PatientsTable from "../components/PatientsTable";
 import PeopleAhead from "../components/PeopleAhead";
