@@ -3,7 +3,7 @@ import './../App.css';
 import axios from 'axios';
 import Cookies from 'js-cookie';
 import { useNavigate } from 'react-router-dom';
-
+import Alert from '@mui/material/Alert';
 
 function Home() {
   const [patientId, setPatientId] = useState<string>('');
@@ -40,7 +40,7 @@ function Home() {
       // Navigate to another page (replace '/dashboard' with your desired route)
       navigate('/queue');
     } catch (error) {
-      setError('Failed to fetch patient data');
+      setError('Invalid Patient ID: Failed to fetch patient data.');
       console.error('Error calling external API:', error);
     } finally {
       setLoading(false);
@@ -71,6 +71,13 @@ function Home() {
             {loading ? 'Loading...' : 'Start'}
           </button>
         </div>
+
+        {/* Only display the alert if there is an error */}
+        {error && (
+          <Alert variant="filled" severity="error" sx={{ backgroundColor: '#FF6666', marginTop: '20px' }}>
+            {error}
+          </Alert>
+        )}
       </div>
     </>
   );
