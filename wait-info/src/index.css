@@ -90,3 +90,10 @@ button {
   color: #6BBAEC;
   font-weight: 600;
 }
+
+.patientId {
+  font-size: 1em;
+  margin: 0;
+  font-family: "Maven Pro", serif;
+  color: #05204A;
+}

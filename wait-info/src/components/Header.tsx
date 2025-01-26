@@ -1,4 +1,5 @@
 import "./../App.css";
+import SessionMenu from "../components/SessionMenu";
 
 function Header() {
   return (
@@ -38,20 +39,7 @@ function Header() {
             alignItems: "center",
           }}
         >
-          <h2
-            style={{
-              fontSize: "12px",
-              margin: 0, // Reset default margin for h2
-              marginRight: "10px",
-            }}
-          >
-            Julia Grenier
-          </h2>
-          <img
-            style={{ width: "20px", height: "20px", borderRadius: "50%" }} // Adjusted size for better visibility
-            src="https://static.thenounproject.com/png/551749-200.png"
-            alt="Profile"
-          />
+          <SessionMenu />
         </div>
       </div>
     </div>
